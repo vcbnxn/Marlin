@@ -34,7 +34,7 @@
 
 // Arduino < 1.0.0 does not define this, so we need to do it ourselves
 #ifndef analogInputToDigitalPin
-# define analogInputToDigitalPin(p) ((p) + A0)
+# define analogInputToDigitalPin(p) ((p) + 0xA0)
 #endif
 
 #ifdef AT90USB
@@ -62,6 +62,11 @@
   #define MYSERIAL MSerial
 #endif
 
+// == DGlass3D == edit this value to change servo delay - RK DGlass3D
+const unsigned long servoDelayInMilliSeconds = 200;
+void delayInMilliSeconds (unsigned long milliSeconds);
+// End DGlass3D code
+
 #define SERIAL_PROTOCOL(x) (MYSERIAL.print(x))
 #define SERIAL_PROTOCOL_F(x,y) (MYSERIAL.print(x,y))
 #define SERIAL_PROTOCOLPGM(x) (serialprintPGM(PSTR(x)))
@@ -85,6 +90,8 @@ extern const char echomagic[] PROGMEM;
 #define SERIAL_ECHOLNPGM(x) SERIAL_PROTOCOLLNPGM(x)
 
 #define SERIAL_ECHOPAIR(name,value) (serial_echopair_P(PSTR(name),(value)))
+
+#define SERIAL_EOL SERIAL_ECHOLN("")
 
 void serial_echopair_P(const char *s_P, float v);
 void serial_echopair_P(const char *s_P, double v);
@@ -170,11 +177,19 @@ void manage_inactivity(bool ignore_stepper_queue=false);
   #define disable_e2() /* nothing */
 #endif
 
+#if (EXTRUDERS > 3) && defined(E3_ENABLE_PIN) && (E3_ENABLE_PIN > -1)
+  #define enable_e3() WRITE(E3_ENABLE_PIN, E_ENABLE_ON)
+  #define disable_e3() WRITE(E3_ENABLE_PIN,!E_ENABLE_ON)
+#else
+  #define enable_e3()  /* nothing */
+  #define disable_e3() /* nothing */
+#endif
 
 enum AxisEnum {X_AXIS=0, Y_AXIS=1, Z_AXIS=2, E_AXIS=3, X_HEAD=4, Y_HEAD=5};
 
 
 void FlushSerialRequestResend();
+void concurrentMove(int current_servo_angle, int desired_servo_angle, int active_extruder);
 void ClearToSend();
 
 void get_coordinates();
@@ -192,8 +207,9 @@ void Stop();
 
 bool IsStopped();
 
-void enquecommand(const char *cmd); //put an ASCII command at the end of the current buffer.
-void enquecommand_P(const char *cmd); //put an ASCII command at the end of the current buffer, read from flash
+bool enquecommand(const char *cmd); //put a single ASCII command at the end of the current buffer or return false when it is full
+void enquecommands_P(const char *cmd); //put one or many ASCII commands at the end of the current buffer, read from flash
+
 void prepare_arc_move(char isclockwise);
 void clamp_to_software_endstops(float target[3]);
 
