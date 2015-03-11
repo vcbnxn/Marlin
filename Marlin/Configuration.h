@@ -31,7 +31,7 @@
 #define SERIAL_PORT 0
 
 // This determines the communication speed of the printer
-#define BAUDRATE 250000
+#define BAUDRATE 115200
 
 // This enables the serial port associated to the Bluetooth interface
 //#define BTENABLED              // Enable BT interface on AT90USB devices
@@ -82,7 +82,7 @@
 // 999 = Leapfrog
 
 #ifndef MOTHERBOARD
-#define MOTHERBOARD 7
+#define MOTHERBOARD 42
 #endif
 
 // Define this to set a custom name for your generic Mendel,
@@ -93,7 +93,7 @@
 // #define MACHINE_UUID "00000000-0000-0000-0000-000000000000"
 
 // This defines the number of extruders
-#define EXTRUDERS 1
+#define EXTRUDERS 2
 
 //// The following define selects which power supply you have. Please choose the one that matches your setup
 // 1 = ATX
@@ -141,10 +141,10 @@
 // 147 is Pt100 with 4k7 pullup
 // 110 is Pt100 with 1k pullup (non standard)
 
-#define TEMP_SENSOR_0 -1
-#define TEMP_SENSOR_1 -1
+#define TEMP_SENSOR_0 1
+#define TEMP_SENSOR_1 1
 #define TEMP_SENSOR_2 0
-#define TEMP_SENSOR_BED 0
+#define TEMP_SENSOR_BED 1
 
 // This makes temp sensor 1 a redundant sensor for sensor 0. If the temperatures difference between these sensors is too high the print will be aborted.
 //#define TEMP_SENSOR_1_AS_REDUNDANT
@@ -196,9 +196,9 @@
 
 // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
 // Ultimaker
-    #define  DEFAULT_Kp 22.2
-    #define  DEFAULT_Ki 1.08
-    #define  DEFAULT_Kd 114
+#define DEFAULT_Kp 14.36
+#define DEFAULT_Ki 0.66
+#define DEFAULT_Kd 79.25
 
 // MakerGear
 //    #define  DEFAULT_Kp 7.0
@@ -239,9 +239,9 @@
 #ifdef PIDTEMPBED
 //120v 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
 //from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
-    #define  DEFAULT_bedKp 10.00
-    #define  DEFAULT_bedKi .023
-    #define  DEFAULT_bedKd 305.4
+#define DEFAULT_bedKp 355
+#define DEFAULT_bedKi 66.5
+#define DEFAULT_bedKd 480
 
 //120v 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
 //from pidautotune
@@ -293,15 +293,15 @@ your extruder heater takes 2 minutes to hit the target on heating.
 // uncomment the 2 defines below:
 
 // Parameters for all extruder heaters
-//#define THERMAL_RUNAWAY_PROTECTION_PERIOD 40 //in seconds
-//#define THERMAL_RUNAWAY_PROTECTION_HYSTERESIS 4 // in degree Celsius
+#define THERMAL_RUNAWAY_PROTECTION_PERIOD 40
+#define THERMAL_RUNAWAY_PROTECTION_HYSTERESIS 4
 
 // If you want to enable this feature for your bed heater,
 // uncomment the 2 defines below:
 
 // Parameters for the bed heater
-//#define THERMAL_RUNAWAY_PROTECTION_BED_PERIOD 20 //in seconds
-//#define THERMAL_RUNAWAY_PROTECTION_BED_HYSTERESIS 2 // in degree Celsius
+#define THERMAL_RUNAWAY_PROTECTION_BED_PERIOD 20
+#define THERMAL_RUNAWAY_PROTECTION_BED_HYSTERESIS 2
 //===========================================================================
 
 
@@ -315,8 +315,8 @@ your extruder heater takes 2 minutes to hit the target on heating.
 // Predefined Mechanics for kits/pre-assembled printers
 //
 // Invent-A-Part RigidBot
-//#define RIGIDBOT
-//#define RIGIDBOT_SIZE 1		// 1 = 10x10 Regular	; 2 = 12x16 Big
+#define RIGIDBOT
+#define RIGIDBOT_SIZE 1
 // Other predefined mechanical settings go here...
 
 #ifdef RIGIDBOT
@@ -612,7 +612,7 @@ your extruder heater takes 2 minutes to hit the target on heating.
 //===========================================================================
 
 // Disable stepper drivers until voltage has stabilized
-//#define STEPPER_RESET_FIX
+#define STEPPER_RESET_FIX
 
 // Custom M code points
 #define CUSTOM_M_CODES
@@ -630,11 +630,11 @@ your extruder heater takes 2 minutes to hit the target on heating.
 // M502 - reverts to the default "factory settings".  You still need to store them in EEPROM afterwards if you want to.
 // 
 // Define this to enable EEPROM support
-//#define EEPROM_SETTINGS
+#define EEPROM_SETTINGS
 //
 // To disable EEPROM Serial responses and decrease program space by ~1700 byte: comment this out:
 // please keep turned on if you can.
-//#define EEPROM_CHITCHAT
+#define EEPROM_CHITCHAT
 //
 // Define EEPROM_OVERWRITE to have EEPROM overwritten with firmware-compiled defaults any time the firmware
 // build date+time changes (default behavior is to overwrite EEPROM only when EEPROM_VERSION in 
@@ -642,11 +642,11 @@ your extruder heater takes 2 minutes to hit the target on heating.
 //#define EEPROM_OVERWRITE
 
 // Preheat Constants
-#define PLA_PREHEAT_HOTEND_TEMP 180
+#define PLA_PREHEAT_HOTEND_TEMP 200
 #define PLA_PREHEAT_HPB_TEMP 70
 #define PLA_PREHEAT_FAN_SPEED 255   // Insert Value between 0 and 255
 
-#define ABS_PREHEAT_HOTEND_TEMP 240
+#define ABS_PREHEAT_HOTEND_TEMP 230
 #define ABS_PREHEAT_HPB_TEMP 100
 #define ABS_PREHEAT_FAN_SPEED 255   // Insert Value between 0 and 255
 
@@ -693,7 +693,7 @@ your extruder heater takes 2 minutes to hit the target on heating.
 
 // RigidBot Panel V1.0
 // http://www.inventapart.com/
-//#define RIGIDPANEL
+#define RIGIDPANEL
 
 //automatic expansion
 #if defined (MAKRPANEL)

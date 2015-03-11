@@ -37,14 +37,14 @@
 # from the commandline with "make HARDWARE_MOTHERBOARD=71" for example
 
 # This defined the board you are compiling for (see Configuration.h for the options)
-HARDWARE_MOTHERBOARD ?= 11
+HARDWARE_MOTHERBOARD ?= 42
 
 # Arduino source install directory, and version number
 ARDUINO_INSTALL_DIR  ?= /Applications/Arduino.app/Contents/Resources/Java
 ARDUINO_VERSION      ?= 105
 
 # You can optionally set a path to the avr-gcc tools. Requires a trailing slash. (ex: /usr/local/avr-gcc/bin)
-AVR_TOOLS_PATH ?=
+AVR_TOOLS_PATH ?= /Applications/Arduino.app/Contents/Resources/Java/hardware/tools/avr/bin/
 
 #Programmer configuration
 UPLOAD_RATE        ?= 115200
@@ -55,17 +55,17 @@ UPLOAD_PORT        ?= /dev/arduino
 BUILD_DIR          ?= applet
 
 # This defines whether Liquid_TWI2 support will be built
-LIQUID_TWI2        ?= 0
+LIQUID_TWI2 ?= 0
 
 # This defines if Wire is needed
-WIRE               ?= 0
+WIRE ?= 0
 
 # This defines if U8glib is needed, for the RepRap Discount Full Graphic LCD for example
 U8GLIB		   ?= 0
 
 # The RigidPanel LCD controller displaces the original ultralcd.cpp/.h implementation entirely
 # Unless you have a RigidPanel from Invent-A-Part, leave this at 0
-RIGIDPANEL         ?= 0
+RIGIDPANEL ?= 1
 
 ############################################################################
 # Below here nothing should be changed...
