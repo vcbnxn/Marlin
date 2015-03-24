@@ -1,12 +1,39 @@
+Current Status: Bug Fixing
+===================
+
+What bugs are we working on: https://github.com/MarlinFirmware/Marlin/milestones/Bug%20Fixing%20Round%201
+
+IRC channel on freenode: #marlin-firmware
+
+(baaaah, #marlin was taken)
+
+If a google hangout is needed then use this link: 
+
+https://plus.google.com/hangouts/_/event/cps5d0ru0iruhl6ebqbk9dpqpa4?authuser=0&hl=da
+
+It's valid for the next 10 years, must remember to renew then :-P
+
+Developer Notes
+===================
+
+- There are now 2 branches: The __development__ branch is where new features and code changes will be sorted out. This branch may have untested code in it, so please let us know if you find any bugs. When the __development__ branch has reached a state where it is stable, it will be moved to the __stable__ branch.
+
+- We are doing a kind of cleanup in the list of Issues and Pull Requests, the aim is to get to a state where we can certify the code as stable. To get the code tested as widely as possible we require several volunteers with a wide variety of hardware configurations willing to test the firmware and help us to certify it as stable. If you want to help out testing go to this issue and let us know: https://github.com/MarlinFirmware/Marlin/issues/1209
+
+- Before you submit any pull request, we ask that you _PLEASE_ test your code before submission, even if the change seems innocuous. When creating the pull request, please include the hardware you used for testing and a short synopsis of your testing procedure. Untested pull requests are less likely to be merged, as even slight changes create the risk of breaking the main branch.
+
+- If you have a fix don't open an issue telling about it, but test the code and submit a pull request. Use the __development__ branch when you submit.
+
 ==========================
 Marlin 3D Printer Firmware
 ==========================
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/2224/badge.svg)](https://scan.coverity.com/projects/2224)
+[![Travis Build Status](https://travis-ci.org/MarlinFirmware/Marlin.svg)](https://travis-ci.org/MarlinFirmware/Marlin)
 
 Marlin has a GPL license because I believe in open development.
 Please do not use this code in products (3D printers, CNC etc) that are closed source or are crippled by a patent.
 
-[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=ErikZalm&url=https://github.com/ErikZalm/Marlin&title=Marlin&language=&tags=github&category=software)
+[![Flattr this git repo](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=ErikZalm&url=https://github.com/MarlinFirmware/Marlin&title=Marlin&language=&tags=github&category=software)
 
 Quick Information
 ===================
@@ -53,6 +80,7 @@ Features:
 *   Automatic operation of extruder/cold-end cooling fans based on nozzle temperature
 *   RC Servo Support, specify angle or duration for continuous rotation servos.
 *   Bed Auto Leveling.
+*   Support for a filament diameter sensor, which adjusts extrusion volume
 
 The default baudrate is 250000. This baudrate has less jitter and hence errors than the usual 115200 baud, but is less supported by drivers and host-environments.
 
@@ -233,6 +261,10 @@ M Codes
 *  M400 - Finish all moves
 *  M401 - Lower z-probe if present
 *  M402 - Raise z-probe if present
+*  M404 - N<dia in mm> Enter the nominal filament width (3mm, 1.75mm ) or will display nominal filament width without parameters
+*  M405 - Turn on Filament Sensor extrusion control.  Optional D<delay in cm> to set delay in centimeters between sensor and extruder
+*  M406 - Turn off Filament Sensor extrusion control
+*  M407 - Displays measured filament diameter
 *  M500 - stores paramters in EEPROM
 *  M501 - reads parameters from EEPROM (if you need reset them after you changed them temporarily).
 *  M502 - reverts to the default "factory settings".  You still need to store them in EEPROM afterwards if you want to.
@@ -250,20 +282,26 @@ M Codes
 Configuring and compilation:
 ============================
 
-Install the arduino software IDE/toolset v23 (Some configurations also work with 1.x.x)
+Install the latest non-beta arduino software IDE/toolset
    http://www.arduino.cc/en/Main/Software
 
 Download the Marlin firmware
-   https://github.com/ErikZalm/Marlin/tree/Marlin_v1
-   Use the "Download Zip" button on the right.
+   https://github.com/MarlinFirmware/Marlin/tree/development
+   
+   For the latest development, or 
+   
+   
+   
+   For the latest stable release
+   
+   In both cases use the "Download Zip" button on the right.
 
-For gen6/gen7 and sanguinololu the Sanguino directory in the Marlin dir needs to be copied to the arduino environment.
-  copy ArduinoAddons\Arduino_x.x.x\sanguino <arduino home>\hardware\Sanguino
+For some spec. boards a spec. dir in the ArduinoAddons directory in the Marlin dir needs to be copied to the arduino environment. <arduino home>\hardware\
 
 Start the arduino IDE.
 Select Tools -> Board -> Arduino Mega 2560    or your microcontroller
 Select the correct serial port in Tools ->Serial Port
-Open Marlin.pde
+Open Marlin.pde or .ino
 
 Click the Verify/Compile button
 
@@ -277,14 +315,6 @@ Instructions for configuring Bed Auto Leveling
 ===============================================
 There are two options for this feature. You may choose to use a servo mounted on the X carriage or you may use a sled that mounts on the X axis and can be docked when not in use.
 See the section for each option below for specifics about installation and configuration. Also included are instructions that apply to both options.
-
-Note for RAMPS users:
----------------------
-
-By default, RAMPS have no power on servo bus (if you happen to have a multimeter, check the voltage on servo power pins).
-In order to get the servo working, you need to supply 5V to 5V pin.. You can do it using your power supply (if it has a 5V output) or jumping the "Vcc" from Arduino to the 5V RAMPS rail.
-These 2 pins are located just between the Reset Button and the yellow fuses... There are marks in the board showing 5V and VCC.. just connect them..
-If jumping the arduino Vcc do RAMPS 5V rail, take care to not use a power hungry servo, otherwise you will cause a blackout in the arduino board ;-)
 
 Instructions for Both Options
 -----------------------------
@@ -387,6 +417,13 @@ For example, suppose you measured the endstop position and it was 20mm to the ri
 
 That's it.. enjoy never having to calibrate your Z endstop neither leveling your bed by hand anymore ;-)
 
+Filament Sensor
+---------------
+Supports the use of a real time filament diameter sensor that measures the diameter of the filament going into the extruder and then adjusts the extrusion rate to compensate for filament that does not match what is defined in the g-code.  The diameter can also be displayed on the LCD screen. This potentially eliminates the need to measure filament diameter when changing spools of filament. Gcode becomes independent of the filament diameter. Can also compensate for changing diameter.
 
+For examples of these sensors, see: http://www.thingiverse.com/thing:454584, https://www.youmagine.com/designs/filament-diameter-sensor, http://diy3dprinting.blogspot.com/2014/01/diy-filament-diameter-sensor.html. Any sensor which produces a voltage equivalent to the diameter in mm (i.e. 1v = 1mm) can be used. This provides a very simple interface and may encourage more innovation in this area.
 
+4 new Mcodes are defined to set relevant parameters: M404, M405, M406, M407 - see above.
+
+ Implements a delay buffer to handle the transit delay between where the filament is measured and when it gets to the extruder.
 
