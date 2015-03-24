@@ -50,7 +50,8 @@
   #define FIRMWARE_URL "https://github.com/fmalpartida/Marlin/tree/SAV-MkI-config"
 #elif MB(RIGIDBOT)
 	#define MACHINE_NAME "RigidBot"
-	#define FIRMWARE_URL "http://inventapart.com"#else
+	#define FIRMWARE_URL "http://inventapart.com"
+#else
   #ifdef CUSTOM_MENDEL_NAME
     #define MACHINE_NAME CUSTOM_MENDEL_NAME
   #else
@@ -153,8 +154,6 @@
 #define MSG_BABYSTEPPING_Y                  "Babystepping Y"
 #define MSG_BABYSTEPPING_Z                  "Babystepping Z"
 #define MSG_SERIAL_ERROR_MENU_STRUCTURE     "Error in menu structure"
-
-// LCD Menu Messages
 
 #include LANGUAGE_INCLUDE
 
