@@ -151,7 +151,9 @@ menuFunc_t currentMenu = lcd_status_screen; /* function pointer to the currently
 menuFunc_t backMenu = currentMenu;
 uint32_t lcd_next_update_millis;
 uint32_t lcd_status_update_millis;
-//uint8_t lcd_status_update_delay;
+uint8_t lcd_status_update_delay;
+bool ignore_click = false;
+bool wait_for_unclick;
 uint8_t lcdDrawUpdate = 2;                  /* Set to none-zero when the LCD needs to draw, decreased after every draw. Set to 2 in LCD routines so the LCD gets atleast 1 full redraw (first redraw is partial) */
 
 //prevMenu and prevEncoderPosition are used to store the previous menu location when editing settings.
@@ -1125,6 +1127,12 @@ void lcd_update()
 	lcdFastUpdate = false;
 }
 
+void lcd_ignore_click(bool b)
+{
+    ignore_click = b;
+    wait_for_unclick = false;
+}
+
 void lcd_setstatus(const char* message)
 {
     if (lcd_status_message_level > 0)
@@ -1185,6 +1193,15 @@ void lcd_buttons_update()
 	}
 
 	buttons = newbuttons;
+}
+
+bool lcd_detected(void)
+{
+#if (defined(LCD_I2C_TYPE_MCP23017) || defined(LCD_I2C_TYPE_MCP23008)) && defined(DETECT_DEVICE)
+  return lcd.LcdDetected() == 1;
+#else
+  return true;
+#endif
 }
 
 void lcd_buzz(long duration, uint16_t freq)
